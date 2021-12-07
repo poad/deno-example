@@ -1,0 +1,48 @@
+name: Build and Test
+ 
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write 
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: Pull request auto merge enabler
+        if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
+        uses: poad/github-pull-request-auto-merge-enable-action@v1.0.0
+        with:
+          pull_request_id: ${{ github.event.pull_request.node_id }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.event.repository.name }}
+          owner: ${{ github.repository_owner }}
+          merge_method: SQUASH
+
+  test:
+    strategy:
+      matrix:
+        deno: ["v1.x", "canary"]
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v2
+      - name: Setup Deno
+        # uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@4a4e59637fa62bd6c086a216c7e4c5b457ea9e79
+        with:
+          deno-version: ${{ matrix.deno }} # tests across multiple Deno versions
+
+      - name: Run build
+        run:  deno
