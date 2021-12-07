@@ -1,0 +1,57 @@
+name: Build and Test
+ 
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  checks: write
+  contents: none
+  deployments: none
+  id-token: write
+  issues: none
+  packages: none
+  pull-requests: write
+  repository-projects: none
+  security-events: write
+  statuses: write
+
+jobs:
+  deno-base-test:
+    strategy:
+      matrix:
+        deno: ["v1.x", "canary"]
+        targets:
+          - test: false
+            lint: false
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v2
+      - name: Setup Deno
+        # uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@4a4e59637fa62bd6c086a216c7e4c5b457ea9e79
+        with:
+          deno-version: ${{ matrix.deno }} # tests across multiple Deno versions
+
+      - name: Run linter
+        if: matrix.targets.lint == true
+        run: |
+          CUR=$(pwd)
+          deno lint
+          cd $CUR
+
+      - name: Run tests
+        if: matrix.targets.test == true
+        run: deno test -A --unstable
+
+      - name: Run build
+        run:  |
+          CUR=$(pwd)
+          $(${{ matrix.targets.build }})
+          cd $CUR

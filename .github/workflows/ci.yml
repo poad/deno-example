@@ -1,0 +1,126 @@
+name: Build and Test
+ 
+on:
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write 
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: Pull request auto merge enabler
+        if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
+        uses: poad/github-pull-request-auto-merge-enable-action@v1.0.0
+        with:
+          pull_request_id: ${{ github.event.pull_request.node_id }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.event.repository.name }}
+          owner: ${{ github.repository_owner }}
+          merge_method: SQUASH
+
+  deno-base-test:
+    strategy:
+      matrix:
+        deno: ["v1.x", "canary"]
+        targets:
+          - path: deno-example/hello
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v2
+      - name: Setup Deno
+        # uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@4a4e59637fa62bd6c086a216c7e4c5b457ea9e79
+        with:
+          deno-version: ${{ matrix.deno }} # tests across multiple Deno versions
+
+      - name: Run build
+        run:  |
+          CUR=$(pwd)
+          cd ${{ matrix.targets.path }}
+          $(${{ matrix.targets.build }})
+          cd $CUR
+
+  yarn-base-test:
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+        targets:
+          - path: next-examples/next-auth0-example
+          - path: next-examples/next-ts-examples
+          - path: next-examples/nextra-example
+          - path: next-examples/sticky-example
+          - path: next-examples/vnc-example
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          check-latest: true
+
+      - name: Build
+        env:
+          NEXT_PUBLIC_AUTH0_DOMAIN: test
+          NEXT_PUBLIC_AUTH0_CLIENT_ID: test
+          NEXT_PUBLIC_CALLBACK_URL: http://localhost:3000
+        run: |
+          cd ${{ matrix.targets.path }}
+          yarn install
+          yarn build
+
+  electron-test:
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+        targets:
+          - path: dockerode-example
+          - path: hello-electron
+
+    if: github.actor != 'dependabot[bot]' && github.token != '' && github.token != null
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          check-latest: true
+
+      - name: Build
+        run: |
+          cd ${{ matrix.targets.path }}
+          yarn install && yarn build
+
+  electron-npm-test:
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+        targets:
+          - path: elm-electron
+
+    if: github.actor != 'dependabot[bot]' && github.token != '' && github.token != null
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          check-latest: true
+
+      - name: Build
+        run: |
+          cd ${{ matrix.targets.path }}
+          npm install && npm build
