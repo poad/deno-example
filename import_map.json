@@ -1,12 +1,12 @@
 {
   "imports": {
     "~/": "./",
-    "std/": "https://deno.land/std@0.167.0/",
+    "std/": "https://deno.land/std@0.155.0/",
     "aleph/": "https://deno.land/x/aleph@1.0.0-beta.21/",
     "aleph/server": "https://deno.land/x/aleph@1.0.0-beta.21/server/mod.ts",
     "aleph/dev": "https://deno.land/x/aleph@1.0.0-beta.21/server/dev.ts",
-    "@unocss/core": "https://esm.sh/@unocss/core@0.45.29",
-    "@unocss/preset-uno": "https://esm.sh/@unocss/preset-uno@0.45.29",
+    "@unocss/core": "https://esm.sh/@unocss/core@0.47.6",
+    "@unocss/preset-uno": "https://esm.sh/@unocss/preset-uno@0.47.6",
     "aleph/react": "https://deno.land/x/aleph@1.0.0-beta.21/runtime/react/mod.ts",
     "aleph/react-client": "https://deno.land/x/aleph@1.0.0-beta.21/runtime/react/client.ts",
     "aleph/react-server": "https://deno.land/x/aleph@1.0.0-beta.21/runtime/react/server.ts",
