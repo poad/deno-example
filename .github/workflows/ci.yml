@@ -45,4 +45,5 @@ jobs:
           deno-version: ${{ matrix.deno }} # tests across multiple Deno versions
 
       - name: Run build
+        working-directory: aleph-example
         run:  deno
