@@ -1,7 +1,7 @@
 {
   "imports": {
     "~/": "./",
-    "std/": "https://deno.land/std@0.223.0/",
+    "std/": "https://deno.land/std@0.224.0/",
     "aleph/": "https://deno.land/x/aleph@1.0.0-beta.21/",
     "aleph/server": "https://deno.land/x/aleph@1.0.0-beta.21/server/mod.ts",
     "aleph/dev": "https://deno.land/x/aleph@1.0.0-beta.21/server/dev.ts",
@@ -10,9 +10,9 @@
     "aleph/react": "https://deno.land/x/aleph@1.0.0-beta.21/runtime/react/mod.ts",
     "aleph/react-client": "https://deno.land/x/aleph@1.0.0-beta.21/runtime/react/client.ts",
     "aleph/react-server": "https://deno.land/x/aleph@1.0.0-beta.21/runtime/react/server.ts",
-    "react": "https://esm.sh/react@18.2.0",
-    "react-dom": "https://esm.sh/react-dom@18.2.0",
-    "react-dom/": "https://esm.sh/react-dom@18.2.0/"
+    "react": "https://esm.sh/react@18.3.0/",
+    "react-dom": "https://esm.sh/react-dom@18.3.0/",
+    "react-dom/": "https://esm.sh/react-dom@18.3.0//"
   },
   "scopes": {}
 }
