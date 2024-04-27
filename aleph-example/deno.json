@@ -11,7 +11,7 @@
       "https://deno.land/x/aleph@1.0.0-beta.21/types.d.ts"
     ],
     "jsx": "react-jsx",
-    "jsxImportSource": "https://esm.sh/react@18.3.0/"
+    "jsxImportSource": "https://esm.sh/react@18.3.1/"
   },
   "importMap": "import_map.json",
   "tasks": {
