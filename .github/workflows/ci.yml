@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Deno
         # uses: denoland/setup-deno@v1
-        uses: denoland/setup-deno@fa660b328d065f7683e7303976bd81e2d58e98ae
+        uses: denoland/setup-deno@5e01c016a857a4dbb5afe9d0f9733cd472cba985
         with:
           deno-version: ${{ matrix.deno }} # tests across multiple Deno versions
 
