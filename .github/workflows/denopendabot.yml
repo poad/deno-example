@@ -13,7 +13,7 @@ jobs:
     steps:
       # dispatch a `denopendabot_run` repository event
       - name: Dispatch Run
-        uses: hasundue/denopendabot@0.18.2 # @denopendabot hasundue/denopendabot
+        uses: hasundue/denopendabot@8ccf037bd89b5e143203f546837df1a1b713b95f # 0.18.2
         with: 
           mode: app
           # or 'action' if you want run Denopendabot locally
