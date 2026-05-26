@@ -15,20 +15,6 @@ permissions:
   contents: write 
 
 jobs:
-  configure:
-    runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'
-    steps:
-      - name: Pull request auto merge enabler
-        if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
-        uses: poad/github-pull-request-auto-merge-enable-action@3a9b27f412592f0eb2cd6649509178e1fcaf3ccf # v3.0.2
-        with:
-          pull_request_number: ${{ github.event.pull_request.number }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.event.repository.name }}
-          owner: ${{ github.repository_owner }}
-          merge_method: SQUASH
-
   test:
     strategy:
       matrix:
@@ -36,14 +22,16 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - name: Setup repo
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Setup Deno
-        # uses: denoland/setup-deno@v1
-        uses: denoland/setup-deno@667a34cdef165d8d2b2e98dde39547c9daac7282
-        with:
-          deno-version: ${{ matrix.deno }} # tests across multiple Deno versions
+    - name: Setup repo
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      with:
+        persist-credentials: false
+    - name: Setup Deno
+      # uses: denoland/setup-deno@v1
+      uses: denoland/setup-deno@667a34cdef165d8d2b2e98dde39547c9daac7282
+      with:
+        deno-version: ${{ matrix.deno }} # tests across multiple Deno versions
 
-      - name: Run build
-        working-directory: aleph-example
-        run:  deno
+    - name: Run build
+      working-directory: aleph-example
+      run:  deno
